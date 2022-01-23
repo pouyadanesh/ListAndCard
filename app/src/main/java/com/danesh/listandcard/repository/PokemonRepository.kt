@@ -13,7 +13,7 @@ class PokemonRepository@Inject constructor(
 ) {
 
     suspend fun getCards(countryCode: String, pageNumber: Int): Response<PokemonListResponse> {
-        return pokemonApi.getBreakingNews(countryCode, pageNumber)
+        return pokemonApi.getPokemons(countryCode, pageNumber)
     }
 
     fun getAllArticles() = pokemonDao.getArticles()

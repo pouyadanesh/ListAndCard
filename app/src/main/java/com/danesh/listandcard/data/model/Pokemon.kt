@@ -9,8 +9,10 @@ import kotlinx.android.parcel.Parcelize
 @Entity(tableName = "pokemon_table")
 data class Pokemon(
     @PrimaryKey(autoGenerate = true)
-    var id : Int? = null,
+    var _id : Int? = null,
+    val id : String?,
     val name: String?,
     val hp: String?,
-    val artist: String?
-)
+    val artist: String?,
+    val imageUrl: String?
+): Parcelable

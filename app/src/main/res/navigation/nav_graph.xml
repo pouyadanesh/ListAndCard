@@ -11,7 +11,7 @@
         android:label="fragment_pokemon_list"
         tools:layout="@layout/fragment_pokemon_list">
         <action
-            android:id="@+id/action_searchNewsFragment_to_articleFragment"
+            android:id="@+id/action_pokemonListFragment_to_pokemonFragment"
             app:destination="@id/pokemonFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
