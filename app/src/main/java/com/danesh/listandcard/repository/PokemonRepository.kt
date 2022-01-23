@@ -8,21 +8,17 @@ import retrofit2.Response
 import javax.inject.Inject
 
 class PokemonRepository@Inject constructor(
-    private val newsApi: PokemonApi,
-    private val articleDao: PokemonDao
+    private val pokemonApi: PokemonApi,
+    private val pokemonDao: PokemonDao
 ) {
 
-    suspend fun getBreakingNews(countryCode: String, pageNumber: Int): Response<PokemonListResponse> {
-        return newsApi.getBreakingNews(countryCode, pageNumber)
+    suspend fun getCards(countryCode: String, pageNumber: Int): Response<PokemonListResponse> {
+        return pokemonApi.getBreakingNews(countryCode, pageNumber)
     }
 
-    suspend fun searchNews(searchQuery: String, pageNumber: Int): Response<PokemonListResponse> {
-        return newsApi.searchForNews(searchQuery, pageNumber)
-    }
+    fun getAllArticles() = pokemonDao.getArticles()
 
-    fun getAllArticles() = articleDao.getArticles()
+    suspend fun insertArticle(pokemon: Pokemon) = pokemonDao.insert(pokemon)
 
-    suspend fun insertArticle(pokemon: Pokemon) = articleDao.insert(pokemon)
-
-    suspend fun deleteArticle(pokemon: Pokemon) = articleDao.delete(pokemon)
+    suspend fun deleteArticle(pokemon: Pokemon) = pokemonDao.delete(pokemon)
 }

@@ -10,5 +10,7 @@ import kotlinx.android.parcel.Parcelize
 data class Pokemon(
     @PrimaryKey(autoGenerate = true)
     var id : Int? = null,
-    val author: String?
+    val name: String?,
+    val hp: String?,
+    val artist: String?
 )

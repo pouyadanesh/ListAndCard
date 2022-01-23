@@ -1,7 +1,8 @@
-package com.danesh.listandcard
+package com.danesh.listandcard.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.danesh.listandcard.R
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
