@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">ListAndCard</string>
+    <string name="txtArtist">Artist : %s</string>
 </resources>

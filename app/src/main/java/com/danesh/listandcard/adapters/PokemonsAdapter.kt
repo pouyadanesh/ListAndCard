@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.danesh.listandcard.R
 import com.danesh.listandcard.data.model.Pokemon
 import com.danesh.listandcard.databinding.ItemPokemonPreviewBinding
 
@@ -40,7 +41,7 @@ class PokemonsAdapter(private val listener: OnItemClickListener): ListAdapter<Po
                     .load(pokemon.imageUrl)
                     .into(ivArticleImage)
                 tvTitle.text = pokemon.name
-                tvSource.text = pokemon.artist
+                tvSource.text = root.resources.getString(R.string.txtArtist,pokemon.artist)
             }
         }
     }

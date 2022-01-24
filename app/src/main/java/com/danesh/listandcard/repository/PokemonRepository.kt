@@ -18,7 +18,7 @@ class PokemonRepository@Inject constructor(
 
     fun getAllArticles() = pokemonDao.getArticles()
 
-    suspend fun insertArticle(pokemon: Pokemon) = pokemonDao.insert(pokemon)
+    suspend fun insertPokemon(pokemon: Pokemon) = pokemonDao.insert(pokemon)
 
-    suspend fun deleteArticle(pokemon: Pokemon) = pokemonDao.delete(pokemon)
+    suspend fun deletePokemon(pokemon: Pokemon) = pokemonDao.delete(pokemon)
 }
