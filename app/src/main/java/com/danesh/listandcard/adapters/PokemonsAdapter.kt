@@ -45,6 +45,7 @@ class PokemonsAdapter(private val listener: OnItemClickListener,
             binding.apply {
                 Glide.with(itemView)
                     .load(pokemon.imageUrl)
+                    .fitCenter()
                     .into(ivArticleImage)
                 tvTitle.text = pokemon.name
                 tvSource.text = root.resources.getString(R.string.txtArtist, pokemon.artist)
