@@ -73,8 +73,7 @@ class PokemonListViewModel @Inject constructor(
 
     fun insertPokemons(cards: List<Pokemon>) = viewModelScope.launch {
         for(c in cards) {
-            val n = repository.insertPokemon(c)
-            Log.e("MYTAG","this is return insert value $n")
+            repository.insertPokemon(c)
         }
     }
 
