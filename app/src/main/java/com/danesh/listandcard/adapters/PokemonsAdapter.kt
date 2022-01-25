@@ -9,11 +9,15 @@ import com.bumptech.glide.Glide
 import com.danesh.listandcard.R
 import com.danesh.listandcard.data.model.Pokemon
 import com.danesh.listandcard.databinding.ItemPokemonPreviewBinding
+import com.like.OnLikeListener
 
-class PokemonsAdapter(private val listener: OnItemClickListener): ListAdapter<Pokemon, PokemonsAdapter.PokemonViewHolder>(DiffCallback()) {
+class PokemonsAdapter(private val listener: OnItemClickListener,
+                      private val likeListener: OnLikeListener) :
+    ListAdapter<Pokemon, PokemonsAdapter.PokemonViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PokemonViewHolder {
-        val binding = ItemPokemonPreviewBinding.inflate(LayoutInflater.from(parent.context), parent,false)
+        val binding =
+            ItemPokemonPreviewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return PokemonViewHolder(binding)
     }
 
@@ -22,36 +26,43 @@ class PokemonsAdapter(private val listener: OnItemClickListener): ListAdapter<Po
         holder.bind(currentItem)
     }
 
-    inner class PokemonViewHolder(private val binding: ItemPokemonPreviewBinding): RecyclerView.ViewHolder(binding.root) {
+    inner class PokemonViewHolder(private val binding: ItemPokemonPreviewBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         init {
             binding.apply {
                 root.setOnClickListener {
                     val position = adapterPosition
-                    if(position != RecyclerView.NO_POSITION){
+                    if (position != RecyclerView.NO_POSITION) {
                         val pokemon = getItem(position)
                         listener.onItemClick(pokemon)
+                        likeListener.onLike(pokemon)
                     }
                 }
             }
         }
 
-        fun bind(pokemon: Pokemon){
+        fun bind(pokemon: Pokemon) {
             binding.apply {
                 Glide.with(itemView)
                     .load(pokemon.imageUrl)
                     .into(ivArticleImage)
                 tvTitle.text = pokemon.name
-                tvSource.text = root.resources.getString(R.string.txtArtist,pokemon.artist)
+                tvSource.text = root.resources.getString(R.string.txtArtist, pokemon.artist)
+                likeButton.isLiked = pokemon.isLike ?: false
             }
         }
     }
 
-    interface OnItemClickListener{
+    interface OnItemClickListener {
         fun onItemClick(pokemon: Pokemon)
     }
 
+    interface OnLikeListener {
+        fun onLike(pokemon: Pokemon)
+    }
 
-    class DiffCallback : DiffUtil.ItemCallback<Pokemon>(){
+
+    class DiffCallback : DiffUtil.ItemCallback<Pokemon>() {
         override fun areItemsTheSame(oldItem: Pokemon, newItem: Pokemon): Boolean {
             return oldItem.imageUrl == newItem.imageUrl
         }

@@ -9,7 +9,6 @@ interface PokemonApi {
 
     @GET("v1/cards")
     suspend fun getPokemons(
-        @Query("hp") countryCode: String = "gte99",
         @Query("page") pageNumber: Int = 1
     ): Response<PokemonListResponse>
 

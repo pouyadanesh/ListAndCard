@@ -18,6 +18,7 @@ import com.danesh.listandcard.data.model.Pokemon
 import com.danesh.listandcard.databinding.FragmentPokemonListBinding
 import com.danesh.listandcard.util.Constants.QUERY_PAGE_SIZE
 import com.danesh.listandcard.util.Constants.SEARCH_NEWS_TIME_DELAY
+import com.danesh.listandcard.util.Constants.hasInternetConnection
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_pokemon_list.*
 import kotlinx.coroutines.Job
@@ -29,7 +30,7 @@ private const val TAG = "PokemonListFragment"
 
 @AndroidEntryPoint
 class PokemonListFragment: Fragment(R.layout.fragment_pokemon_list),
-    PokemonsAdapter.OnItemClickListener{
+    PokemonsAdapter.OnItemClickListener, PokemonsAdapter.OnLikeListener{
 
     private val viewModel: PokemonListViewModel by viewModels()
     var isLastPage = false
@@ -39,7 +40,7 @@ class PokemonListFragment: Fragment(R.layout.fragment_pokemon_list),
         super.onViewCreated(view, savedInstanceState)
 
         val binding = FragmentPokemonListBinding.bind(view)
-        val pokemonsAdapter = PokemonsAdapter(this)
+        val pokemonsAdapter = PokemonsAdapter(this,this)
 
         binding.apply {
             rvPokemonCards.apply {
@@ -49,16 +50,11 @@ class PokemonListFragment: Fragment(R.layout.fragment_pokemon_list),
             }
         }
 
-        var job: Job? = null
-        etSearch.addTextChangedListener { editable ->
-            job?.cancel()
-            job = MainScope().launch {
-                delay(SEARCH_NEWS_TIME_DELAY)
-                editable?.let {
-                    if (editable.toString().length>1) {
-                        viewModel.searchPokemons(editable.toString())
-                    }
-                }
+        if(hasInternetConnection(requireContext())){
+            viewModel.searchPokemons()
+        } else {
+            viewModel.getAllPokemons().observe(viewLifecycleOwner) {
+                pokemonsAdapter.submitList(it)
             }
         }
 
@@ -67,8 +63,7 @@ class PokemonListFragment: Fragment(R.layout.fragment_pokemon_list),
                 is com.danesh.listandcard.util.Resource.Success -> {
                     it.data?.let { newsResponse ->
                         pokemonsAdapter.submitList(newsResponse.cards.toList())
-//                        val totalPages = newsResponse.totalResults / QUERY_PAGE_SIZE + 2
-//                        isLastPage = viewModel.searchPokemonsPage == totalPages
+                        viewModel.insertPokemons(newsResponse.cards.toList())
                     }
                 }
                 is com.danesh.listandcard.util.Resource.Error -> {
@@ -103,7 +98,7 @@ class PokemonListFragment: Fragment(R.layout.fragment_pokemon_list),
             val shouldPaginate = !isLastPage && isAtLastItem && isNotAtBeginning && isTotalMoreThanVisible && isScrolling
 
             if(shouldPaginate){
-                viewModel.searchPokemons(etSearch.text.toString())
+                viewModel.searchPokemons()
                 isScrolling = false
             }
         }
@@ -112,5 +107,15 @@ class PokemonListFragment: Fragment(R.layout.fragment_pokemon_list),
     override fun onItemClick(pokemon: Pokemon) {
         val action = PokemonListFragmentDirections.actionPokemonListFragmentToPokemonFragment(pokemon)
         findNavController().navigate(action)
+    }
+
+    override fun onLike(pokemon: Pokemon) {
+        pokemon.isLike.let {
+            if (it!=null)
+                !it
+            else
+                true
+        }
+        viewModel.updatePokemon(pokemon)
     }
 }

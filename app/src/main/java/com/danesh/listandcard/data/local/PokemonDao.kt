@@ -8,10 +8,13 @@ import com.danesh.listandcard.data.model.Pokemon
 interface PokemonDao {
 
     @Query("SELECT * FROM pokemon_table")
-    fun getArticles() : LiveData<List<Pokemon>>
+    fun getPokemons() : LiveData<MutableList<Pokemon>>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(pokemon: Pokemon) : Long
+
+    @Update
+    suspend fun updatePokemon(pokemon: Pokemon)
 
     @Delete
     suspend fun delete(pokemon: Pokemon)

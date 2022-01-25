@@ -8,11 +8,11 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 @Entity(tableName = "pokemon_table")
 data class Pokemon(
-    @PrimaryKey(autoGenerate = true)
-    var _id : Int? = null,
-    val id : String?,
+    @PrimaryKey
+    val id : String,
     val name: String?,
     val hp: String?,
     val artist: String?,
+    var isLike: Boolean?,
     val imageUrl: String?
 ): Parcelable

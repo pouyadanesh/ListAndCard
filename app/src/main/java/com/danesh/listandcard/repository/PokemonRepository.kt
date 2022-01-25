@@ -12,11 +12,13 @@ class PokemonRepository@Inject constructor(
     private val pokemonDao: PokemonDao
 ) {
 
-    suspend fun getCards(countryCode: String, pageNumber: Int): Response<PokemonListResponse> {
-        return pokemonApi.getPokemons(countryCode, pageNumber)
+    suspend fun getCards(pageNumber: Int): Response<PokemonListResponse> {
+        return pokemonApi.getPokemons(pageNumber)
     }
 
-    fun getAllArticles() = pokemonDao.getArticles()
+    suspend fun updatePokemon(pokemon: Pokemon) = pokemonDao.updatePokemon(pokemon)
+
+    fun getAllPokemons() = pokemonDao.getPokemons()
 
     suspend fun insertPokemon(pokemon: Pokemon) = pokemonDao.insert(pokemon)
 
